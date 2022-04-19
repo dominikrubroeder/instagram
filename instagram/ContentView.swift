@@ -12,26 +12,26 @@ struct ContentView: View {
         TabView() {
             MainFeedView()
                 .tabItem {
-                    Label("", systemImage: "house.fill")
+                    Image(systemName: "house.fill")
                 }
             
             SearchView()
                 .tabItem {
-                    Label("", systemImage: "magnifyingglass")
+                    Image(systemName: "magnifyingglass")
                 }
             
             ReelsView()
                 .tabItem {
-                    Label("", systemImage: "play.rectangle.fill")
+                    Image(systemName: "play.rectangle.fill")
                 }
             
             ShopView()
                 .tabItem {
-                    Label("", systemImage: "cart")
+                    Image(systemName: "cart")
                 }
             UserProfileView()
                 .tabItem {
-                    Label("", systemImage: "person.crop.circle")
+                    Image(systemName: "person.crop.circle")
                 }
         }
     }

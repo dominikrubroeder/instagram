@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PostUI: View {
+    let user: User
     let post: Post
     
     var body: some View {
@@ -17,7 +18,7 @@ struct PostUI: View {
                     Circle()
                         .frame(width: 25, height: 25, alignment: .center)
                     VStack(alignment: .leading) {
-                        Text(post.authorName)
+                        Text(user.userName)
                             .font(.body)
                             .fontWeight(.bold)
                         Text(post.location)
@@ -27,7 +28,7 @@ struct PostUI: View {
                 
                 Spacer()
                 
-                HStack {
+                HStack(spacing: 2) {
                     Circle()
                         .frame(width: 4, height: 4)
                     Circle()
@@ -35,10 +36,13 @@ struct PostUI: View {
                     Circle()
                         .frame(width: 4, height: 4)
                 }
-                .frame(width: 32, alignment: .center)
             }
             
-            Rectangle()
+            ForEach(post.images, id: \.self) {
+                Image($0)
+                    .resizable()
+                    .scaledToFit()
+            }
             
             HStack {
                 HStack {
@@ -46,34 +50,94 @@ struct PostUI: View {
                     Image(systemName: "bubble.right")
                     Image(systemName: "paperplane")
                 }
+                .frame(width: 85, alignment: .leading)
                 
                 Spacer()
                 
-                Image(systemName: "heart")
+                HStack(spacing: 2) {
+                    ForEach(post.images, id: \.self) {_ in 
+                        Circle()
+                            .frame(width: 4, height: 4)
+                    }
+                }
                 
                 Spacer()
                 
                 Image(systemName: "bookmark")
+                    .frame(width: 85, alignment: .trailing)
             }
+            .padding(.vertical, 4)
             
             VStack {
-                Text("Gefällt \(post.authorName) und \(post.likes) weiteren Personen")
+                Text("Gefällt \(user.userName) und \(post.likes) weiteren Personen")
+                    .padding(.bottom, 4)
+                
                 VStack {
                     ForEach(post.comments, id: \.self) {
                         Text("\($0)…")
+                            .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             }
         }
-        .padding(/*@START_MENU_TOKEN@*/.vertical/*@END_MENU_TOKEN@*/)
+        .padding(.vertical)
     }
 }
 
 struct MainFeedView: View {
     var body: some View {
-        List(posts) { post in
-            PostUI(post: post)
+        NavigationView {
+            ScrollView {
+                ScrollView(.horizontal) {
+                    HStack(alignment: .top, spacing: 8) {
+                        ForEach(users) { user in
+                            VStack(spacing: 4) {
+                                Image(user.userImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 50, height: 50)
+                                    .foregroundColor(.white)
+                                    .background(Color.green)
+                                    .clipShape(Circle())
+                                
+                                Text(user.userName)
+                                    .font(.caption)
+                                    .lineLimit(1)
+                                    .frame(width: 70)
+                            }
+                        }
+                    }
+                }
+                
+//                ForEach(users) { user in
+//                    PostUI(user: user, post: user.posts)
+//                }
+            }
+            .navigationTitle("Instagram")
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    HStack(spacing: 0) {
+                        Button {
+                            print("Pressed")
+                        } label: {
+                            Image(systemName: "plus.app")
+                        }
+                        
+                        Button {
+                            print("Pressed")
+                        } label: {
+                            Image(systemName: "heart")
+                        }
+                        
+                        Button {
+                            print("Pressed")
+                        } label: {
+                            Image(systemName: "paperplane")
+                        }
+                    }
+                }
+            }
         }
     }
 }
