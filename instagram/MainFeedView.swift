@@ -37,6 +37,7 @@ struct PostUI: View {
                         .frame(width: 4, height: 4)
                 }
             }
+            .padding(.horizontal)
             
             ForEach(post.images, id: \.self) {
                 Image($0)
@@ -66,13 +67,13 @@ struct PostUI: View {
                 Image(systemName: "bookmark")
                     .frame(width: 85, alignment: .trailing)
             }
-            .padding(.vertical, 4)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
             
-            VStack {
-                Text("Gefällt \(user.userName) und \(post.likes) weiteren Personen")
-                    .padding(.bottom, 4)
+            VStack(spacing: 16) {
+                Text("Gefällt \(user.userName) und \(post.likes) weiteren Personen").multilineTextAlignment(.leading)
                 
-                VStack {
+                VStack(spacing: 4) {
                     ForEach(post.comments, id: \.self) {
                         Text("\($0)…")
                             .multilineTextAlignment(.leading)
@@ -80,6 +81,7 @@ struct PostUI: View {
                     }
                 }
             }
+            .padding(.horizontal)
         }
         .padding(.vertical)
     }
@@ -89,14 +91,14 @@ struct MainFeedView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                ScrollView(.horizontal) {
-                    HStack(alignment: .top, spacing: 8) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(alignment: .top, spacing: 16) {
                         ForEach(users) { user in
                             VStack(spacing: 4) {
                                 Image(user.userImage)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 50, height: 50)
+                                    .frame(width: 70, height: 70)
                                     .foregroundColor(.white)
                                     .background(Color.green)
                                     .clipShape(Circle())
@@ -108,11 +110,14 @@ struct MainFeedView: View {
                             }
                         }
                     }
+                    .padding(.leading, 8)
                 }
                 
-//                ForEach(users) { user in
-//                    PostUI(user: user, post: user.posts)
-//                }
+                ForEach(users) { user in
+                    ForEach(user.posts) { post in
+                        PostUI(user: user, post: post)
+                    }
+                }
             }
             .navigationTitle("Instagram")
             .toolbar {
